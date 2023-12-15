@@ -28,9 +28,9 @@ void imprimirArray(int total, Container containers[])
 }
 
 // Função de comparação para o mergesort
-int comparaCNPJ(const void *a, const void *b)
+int comparaCODIGO(const void *a, const void *b)
 {
-    return strcmp(((Container *)a)->cnpj, ((Container *)b)->cnpj);
+    return strcmp(((Container *)a)->codigo, ((Container *)b)->codigo);
 }
 
 // Função para mesclar duas partes do array durante o mergesort
@@ -50,7 +50,7 @@ void merge(Container *container, int inicio, int meio, int fim)
     int i = 0, j = 0, k = inicio;
     while (i < n1 && j < n2)
     {
-        if (comparaCNPJ(&temp1[i], &temp2[j]) <= 0)
+        if (comparaCODIGO(&temp1[i], &temp2[j]) <= 0)
         {
             container[k] = temp1[i];
             i++;
@@ -95,42 +95,26 @@ void mergesort(Container *arr, int inicio, int fim)
 
 // Função para imprimir a diferença entre dois containers
 void imprimirDiferenca(Container *c1, Container *c2) {
-    printf("%s: %s<->%s\n", c1->codigo, c1->cnpj, c2->cnpj);
+    printf("%s: %s\n", c1->codigo, c1->cnpj);
+    printf("%s: %s\n", c2->codigo, c2->cnpj);
+    printf("-----------------------------------------------\n");
 }
 
-// Função para procurar um container em um array ordenado usando busca binária
-bool buscarContainer(Container array[], int tamanho, Container *alvo) {
-    int inicio = 0, fim = tamanho - 1;
-    
-    while (inicio <= fim) {
-        int meio = (inicio + fim) / 2;
-        int comparacao = strcmp(array[meio].cnpj, alvo->cnpj);
+void comparar(Container array1[], int tamanho1, Container array2[], int tamanho2){
+    for (int i = 0; i < tamanho2; i++)
+    {
+        for (int j = 0; j < tamanho1; j++)
+        {
+            if (strcmp(array2[i].codigo, array1[j].codigo) == 0)
+            {
+                imprimirDiferenca(&array1[j], &array2[i]);
+            }
+            
+        }
         
-        if (comparacao == 0) {
-            // Encontrou o container
-            return true;
-        } else if (comparacao < 0) {
-            // O alvo é maior, continue à direita
-            inicio = meio + 1;
-        } else {
-            // O alvo é menor, continue à esquerda
-            fim = meio - 1;
-        }
     }
     
-    // Não encontrou o container
-    return false;
 }
-
-// Função principal para comparar dois arrays de containers
-void comparar(Container array1[], int tamanho1, Container array2[], int tamanho2) {
-    for (int i = 0; i < tamanho2; i++) {
-        if (buscarContainer(array1, tamanho1, &array2[i])) {
-            imprimirDiferenca(&array1[i], &array2[i]);
-        }
-    }
-}
-
 
 
 int main(int argc, char *argv[])
