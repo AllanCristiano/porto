@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <stdbool.h>
 
 typedef struct
 {
@@ -105,7 +104,7 @@ void comparar(Container array1[], int tamanho1, Container array2[], int tamanho2
     {
         for (int j = 0; j < tamanho1; j++)
         {
-            if (strcmp(array2[i].codigo, array1[j].codigo) == 0)
+            if ((strcmp(array2[i].codigo, array1[j].codigo) == 0)&& (strcmp(array2[i].cnpj, array1[j].cnpj) != 0))
             {
                 imprimirDiferenca(&array1[j], &array2[i]);
             }
