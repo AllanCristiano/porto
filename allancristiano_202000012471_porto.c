@@ -18,14 +18,6 @@ void montarArray(FILE *arq, int tamanho, Container containers[])
     }
 }
 
-void imprimirArray(int total, Container containers[])
-{
-    for (int i = 0; i < total; i++)
-    {
-        printf("codigo: %s, cnpj: %s, peso: %d\n", containers[i].codigo, containers[i].cnpj, containers[i].peso);
-    }
-}
-
 // Função de comparação para o mergesort
 int comparaCODIGO(const void *a, const void *b)
 {
@@ -92,33 +84,29 @@ void mergesort(Container *arr, int inicio, int fim)
     }
 }
 
-// Função para imprimir a diferença entre dois containers
-void imprimirDiferenca(Container *c1, Container *c2) {
-    printf("%s: %s\n", c1->codigo, c1->cnpj);
-    printf("%s: %s\n", c2->codigo, c2->cnpj);
-    printf("-----------------------------------------------\n");
-}
-
-void comparar(Container array1[], int tamanho1, Container array2[], int tamanho2){
-    for (int i = 0; i < tamanho2; i++)
-    {
-        for (int j = 0; j < tamanho1; j++)
-        {
-            if ((strcmp(array2[i].codigo, array1[j].codigo) == 0)&& (strcmp(array2[i].cnpj, array1[j].cnpj) != 0))
+void imprimirRepetidos(Container arr1[], Container arr2[], int size1, int size2) {
+    int i = 0, j = 0;
+    while (i < size1 && j < size2) {
+        if (strcmp(arr1[i].codigo, arr2[j].codigo) < 0)
+            i++;
+        else if (strcmp(arr1[i].codigo, arr2[j].codigo) > 0)
+            j++;
+        else if(strcmp(arr1[i].codigo, arr2[j].codigo) == 0){
+            if (strcmp(arr1[i].cnpj, arr2[j].cnpj) != 0)
             {
-                imprimirDiferenca(&array1[j], &array2[i]);
+                printf("Codigo: %s, CNPJ: %s, Peso: %d\n", arr1[i].codigo, arr1[i].cnpj, arr1[i].peso);
+                printf("Codigo: %s, CNPJ: %s, Peso: %d\n", arr2[j].codigo, arr2[j].cnpj, arr2[j].peso);
             }
             
+            i++;
+            j++;
         }
-        
     }
-    
 }
-
 
 int main(int argc, char *argv[])
 {
-    // Ilustrando uso de argumentos de programa
+    // argumentos de programa
     printf("#ARGS = %i\n", argc);
     FILE *arquivo = fopen(argv[1], "r");
 
@@ -140,11 +128,13 @@ int main(int argc, char *argv[])
         montarArray(arquivo, num_total_container_checar, containers_checar);
 
         // aplicando ordenação por cnpj ordem crescente
-        mergesort(containers_checar, 0, num_total_container_checar - 1);
         mergesort(containers, 0, num_total_container - 1);
+        mergesort(containers_checar, 0, num_total_container_checar  -1);
 
-        // comparar container
-        comparar(containers, num_total_container, containers_checar, num_total_container_checar);
+
+        // imprimir repetidos
+        imprimirRepetidos(containers, containers_checar, num_total_container, num_total_container_checar);
+
     }
 
     fclose(arquivo);
